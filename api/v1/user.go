@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"server/models/common/response"
 	"server/models/user"
 	"server/service"
@@ -22,6 +23,7 @@ func (ua *UserApi) UserRegister(c *gin.Context) {
 		response.FailWithMessage("参数不合法", c)
 		return
 	}
+	fmt.Println(u)
 
 	if err := usrService.CreateUser(u); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -36,11 +38,14 @@ func (ua *UserApi) UserLogin(c *gin.Context) {
 		response.FailWithMessage("用户参数不合法", c)
 		return
 	}
-
-	if cu, isFind := usrService.FindUser(u); isFind {
+	id := usrService.GetUserIDByAccount(u.Account)
+	if id == 0 {
+		response.FailWithMessage("系统内部错误", c)
+	}
+	if cu, isFind := usrService.FindUserDetailByID(id); isFind {
 		token, _ := utils.GenerateToken(u.Account)
 		utils.SetToken(c, token, 86400*7)
-		response.OkWithData(map[string]any{"account_id": cu.ID, "account": cu.Account}, c)
+		response.OkWithData(cu, c)
 		return
 	}
 	response.FailWithMessage("账号或密码错误", c)

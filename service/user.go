@@ -18,7 +18,13 @@ func (us *UserService) CreateUser(u user.UserModel) error {
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return errors.New("注册失败，请咨询网站管理员")
 	}
-	if db.Create(&u).Error != nil {
+	userDetail := user.UserDetailModel{
+		Nickname:  "未命名",
+		Role:      0,
+		Avatar:    "",
+		UserModel: u,
+	}
+	if db.Create(&userDetail).Error != nil {
 		return errors.New("注册失败，请重试")
 	}
 	return nil
@@ -34,6 +40,24 @@ func (us *UserService) FindUser(u user.UserModel) (user.UserModel, bool) {
 	return user.UserModel{}, false
 }
 
-func (us *UserService) EditUserDetails(id string, u user.UserDetailModel) {
-
+func (us *UserService) GetUserIDByAccount(account string) uint {
+	var cu user.UserModel
+	if global.LS_DB.Where("account = ?", account).First(&cu).Error == nil {
+		return cu.ID
+	}
+	return 0
 }
+
+// FindUserDetailByID 通过id查找user是否存在并返回详细信息
+func (us *UserService) FindUserDetailByID(id uint) (user.UserDetailModel, bool) {
+	// 获取完整的user信息
+	var cu user.UserDetailModel
+	if global.LS_DB.Preload("UserModel").First(&cu, user.UserDetailModel{UserModelID: id}).Error == nil {
+		return cu, true
+	}
+	return user.UserDetailModel{}, false
+}
+
+//func (us *UserService) EditUserDetails(id string, u user.UserDetailModel) {
+//
+//}

@@ -5,13 +5,13 @@ import "gorm.io/gorm"
 type UserModel struct {
 	gorm.Model
 	Account  string `json:"account,omitempty" gorm:"unique"`
-	Password string `json:"password,omitempty"`
+	Password string `json:"password"`
 }
 
 type UserDetailModel struct {
 	Nickname    string
 	Role        int
 	Avatar      string
-	UserModelID uint
-	UserModel   UserModel
+	UserModelID uint      `json:"account_id"`
+	UserModel   UserModel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
