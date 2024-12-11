@@ -6,7 +6,7 @@ type ProgramModel struct {
 	gorm.Model
 	Name      string `json:"name" binding:"required"`
 	Domain    string `json:"domain" binding:"required"`
-	Secure    bool   `json:"secure" binding:"required"`
-	AccountID uint   `json:"account_id" gorm:"column:account_id"`
+	Secure    bool   `json:"secure"`
+	AccountID uint   `json:"account_id" binding:"required" gorm:"column:account_id"`
 	WebSiteId string `json:"-" gorm:"column:website_id"`
 }
