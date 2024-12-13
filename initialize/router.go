@@ -15,6 +15,7 @@ var (
 func InitRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(middleware.Cors())
+	r.Static("/uploads", "./uploads")
 	UserRouter.InitUserRouter(r)
 	ProgramRouter.InitProgramRouter(r)
 	return r

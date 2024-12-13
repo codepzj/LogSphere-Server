@@ -16,6 +16,6 @@ func (ur *UserRouter) InitUserRouter(r *gin.Engine) {
 		user.GET("/clear", userApi.UserClearStatus)
 		user.POST("/create", userApi.UserRegister)
 		user.POST("/find", userApi.UserLogin)
-
+		user.POST("/avatar-upload", userApi.UploadUserAvatar)
 	}
 }

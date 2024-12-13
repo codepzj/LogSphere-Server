@@ -9,9 +9,9 @@ type UserModel struct {
 }
 
 type UserDetailModel struct {
-	Nickname    string
-	Role        int
-	Avatar      string
-	UserModelID uint      `json:"account_id"`
-	UserModel   UserModel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Nickname    string    `json:"nickname,omitempty"`
+	Role        int       `json:"role"`
+	Avatar      string    `json:"avatar,omitempty"`
+	UserModelID uint      `json:"account_id,omitempty"`
+	UserModel   UserModel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"user_model"`
 }

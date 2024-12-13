@@ -38,9 +38,10 @@ func (ua *UserApi) UserLogin(c *gin.Context) {
 		response.FailWithMessage("用户参数不合法", c)
 		return
 	}
-	id := usrService.GetUserIDByAccount(u.Account)
+	id := usrService.GetUserID(u)
 	if id == 0 {
-		response.FailWithMessage("系统内部错误", c)
+		response.FailWithMessage("账号或密码错误", c)
+		return
 	}
 	if cu, isFind := usrService.FindUserDetailByID(id); isFind {
 		token, _ := utils.GenerateToken(u.Account)
@@ -48,11 +49,15 @@ func (ua *UserApi) UserLogin(c *gin.Context) {
 		response.OkWithData(cu, c)
 		return
 	}
-	response.FailWithMessage("账号或密码错误", c)
+	response.FailWithMessage("系统内部错误", c)
 }
 
 // UserClearStatus 清空user的Cookie
 func (ua *UserApi) UserClearStatus(c *gin.Context) {
 	utils.ClearToken(c)
 	response.Ok(c)
+}
+
+func (ua *UserApi) UploadUserAvatar(c *gin.Context) {
+	utils.UploadFile("user", c)
 }

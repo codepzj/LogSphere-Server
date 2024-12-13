@@ -40,9 +40,9 @@ func (us *UserService) FindUser(u user.UserModel) (user.UserModel, bool) {
 	return user.UserModel{}, false
 }
 
-func (us *UserService) GetUserIDByAccount(account string) uint {
+func (us *UserService) GetUserID(u user.UserModel) uint {
 	var cu user.UserModel
-	if global.LS_DB.Where("account = ?", account).First(&cu).Error == nil {
+	if global.LS_DB.Where("account = ? and password = ?", u.Account, u.Password).First(&cu).Error == nil {
 		return cu.ID
 	}
 	return 0
