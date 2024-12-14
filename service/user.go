@@ -12,7 +12,7 @@ type UserService struct{}
 // CreateUser 新增用户
 func (us *UserService) CreateUser(u user.UserModel) error {
 	db := global.LS_DB
-	err := db.First(&user.UserModel{}, "account=?", u.Account).Error
+	err := db.First(&user.UserModel{}, "account = ?", u.Account).Error
 	if err == nil {
 		return errors.New("账号已存在，无法重复创建")
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -58,6 +58,7 @@ func (us *UserService) FindUserDetailByID(id uint) (user.UserDetailModel, bool) 
 	return user.UserDetailModel{}, false
 }
 
-//func (us *UserService) EditUserDetails(id string, u user.UserDetailModel) {
-//
-//}
+func (us *UserService) EditUserDetails(u user.UserDetailModel) (int, error) {
+	result := global.LS_DB.Model(&user.UserDetailModel{}).Where("user_model_id = ?", u.UserModelID).Select("*").Updates(u)
+	return int(result.RowsAffected), result.Error
+}

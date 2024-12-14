@@ -17,5 +17,6 @@ func (ur *UserRouter) InitUserRouter(r *gin.Engine) {
 		user.POST("/create", userApi.UserRegister)
 		user.POST("/find", userApi.UserLogin)
 		user.POST("/avatar-upload", userApi.UploadUserAvatar)
+		user.POST("/edit-profile", userApi.UserEditProfile)
 	}
 }

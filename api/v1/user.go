@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var usrService = new(service.UserService)
+var userService = new(service.UserService)
 
 type UserApi struct {
 }
@@ -25,7 +25,7 @@ func (ua *UserApi) UserRegister(c *gin.Context) {
 	}
 	fmt.Println(u)
 
-	if err := usrService.CreateUser(u); err != nil {
+	if err := userService.CreateUser(u); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -38,12 +38,12 @@ func (ua *UserApi) UserLogin(c *gin.Context) {
 		response.FailWithMessage("用户参数不合法", c)
 		return
 	}
-	id := usrService.GetUserID(u)
+	id := userService.GetUserID(u)
 	if id == 0 {
 		response.FailWithMessage("账号或密码错误", c)
 		return
 	}
-	if cu, isFind := usrService.FindUserDetailByID(id); isFind {
+	if cu, isFind := userService.FindUserDetailByID(id); isFind {
 		token, _ := utils.GenerateToken(u.Account)
 		utils.SetToken(c, token, 86400*7)
 		response.OkWithData(cu, c)
@@ -60,4 +60,18 @@ func (ua *UserApi) UserClearStatus(c *gin.Context) {
 
 func (ua *UserApi) UploadUserAvatar(c *gin.Context) {
 	utils.UploadFile("user", c)
+}
+
+func (ua *UserApi) UserEditProfile(c *gin.Context) {
+	var ud user.UserDetailModel
+	if c.ShouldBindJSON(&ud) != nil {
+		response.FailWithMessage("用户参数错误", c)
+		return
+	}
+	fmt.Println(ud)
+	if updateRows, err := userService.EditUserDetails(ud); err == nil && updateRows != 0 {
+		response.OkWithMessage("更新用户信息成功", c)
+		return
+	}
+	response.FailWithMessage("更新用户信息失败", c)
 }
