@@ -10,6 +10,7 @@ import (
 var (
 	UserRouter    = router.RouterGroupApp.UserRouter
 	ProgramRouter = router.RouterGroupApp.ProgramRouter
+	TrackRouter   = router.RouterGroupApp.TrackRouter
 )
 
 func InitRouter() *gin.Engine {
@@ -18,5 +19,6 @@ func InitRouter() *gin.Engine {
 	r.Static("/uploads", "./uploads")
 	UserRouter.InitUserRouter(r)
 	ProgramRouter.InitProgramRouter(r)
+	TrackRouter.InitTrackRouter(r)
 	return r
 }
