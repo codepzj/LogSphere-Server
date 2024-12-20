@@ -68,7 +68,7 @@ func (ua *UserApi) UserEditProfile(c *gin.Context) {
 		response.FailWithMessage("用户参数错误", c)
 		return
 	}
-	fmt.Println(ud)
+
 	if updateRows, err := userService.EditUserDetails(ud); err == nil && updateRows != 0 {
 		response.OkWithMessage("更新用户信息成功", c)
 		return

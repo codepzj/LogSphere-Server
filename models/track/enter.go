@@ -18,8 +18,12 @@ type TrackModel struct {
 	StayDuration   int64                 `json:"stayDuration"`
 	ProgramModelID string                `json:"website_id"`
 	ProgramModel   *program.ProgramModel `json:"-" gorm:"references:WebSiteId"`
+	IPAddr         string                `json:"ip_addr"`
+	Location       string                `json:"location"`
 }
 
-type GraphReq struct {
-	WebsiteId string `json:"website_id" binding:"required"`
+type ReferrerRatioModel struct {
+	Domain string
+	Count  int
+	Ratio  float64
 }

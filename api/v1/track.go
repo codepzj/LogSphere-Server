@@ -86,21 +86,30 @@ func (ta *TrackAPI) GetAllTrackRecordsByWebsiteId(c *gin.Context) {
 		return
 	}
 	tm := trackService.GetAllTrackRecordsByWebsiteId(websiteId)
-	fmt.Println(tm)
 	response.OkWithDetailed(tm, "查询所有记录成功", c)
 }
 
 func (ta *TrackAPI) GetAnalyse(c *gin.Context) {
-	var graphreq track.GraphReq
-	if c.ShouldBindJSON(&graphreq) != nil {
-		response.FailWithMessage("website_id为空", c)
+	websiteId := c.DefaultQuery("websiteId", "")
+	if websiteId == "" {
+		response.FailWithMessage("websiteId为空", c)
 		return
 	}
-	websiteId := graphreq.WebsiteId
 	views := trackService.GetAllPageViews(websiteId)
 	visitors := trackService.GetVisitorNums(websiteId)
+	pageDuration := trackService.GetPageDuration(websiteId)
+	referrerInfo := trackService.GetReferrer(websiteId)
+	deviceInfo, _ := trackService.GetDeviceInfo(websiteId)
+	pageInfo, _ := trackService.GetPageInfo(websiteId)
+	locationInfo, _ := trackService.GetLocationInfo(websiteId)
+
 	response.OkWithData(map[string]any{
-		"views":    views,
-		"visitors": visitors,
+		"views":        views,
+		"visitors":     visitors,
+		"pageDuration": pageDuration,
+		"referrerInfo": referrerInfo,
+		"deviceInfo":   deviceInfo,
+		"pageInfo":     pageInfo,
+		"locationInfo": locationInfo,
 	}, c)
 }

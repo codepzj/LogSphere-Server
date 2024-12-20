@@ -14,6 +14,6 @@ func (tr *TrackRouter) InitTrackRouter(r *gin.Engine) {
 	{
 		tg.GET("/get-all-records", trackApi.GetAllTrackRecordsByWebsiteId)
 		tg.GET("/", trackApi.TrackUser)
-		tg.POST("/analyse", trackApi.GetAnalyse)
+		tg.GET("/analyse", trackApi.GetAnalyse)
 	}
 }
