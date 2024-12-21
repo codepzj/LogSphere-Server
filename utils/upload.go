@@ -13,6 +13,7 @@ import (
 func UploadFile(dir string, c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
+		fmt.Println(err.Error())
 		response.FailWithMessage("文件上传失败", c)
 		return
 	}

@@ -19,4 +19,14 @@ func (ps *ProgramService) FindAllProgramByAccountID(AccountID string) ([]program
 	tx := global.LS_DB.Where("account_id = ?", AccountID).Find(&programs)
 	//fmt.Println(programs)
 	return programs, tx
+
+}
+func (ps *ProgramService) FindURLByWebsiteID(websiteId string) string {
+	var p program.ProgramModel
+	global.LS_DB.Where("website_id = ?", websiteId).First(&p)
+	if p.Secure {
+		return "https://" + p.Domain
+	}
+
+	return "http://" + p.Domain
 }

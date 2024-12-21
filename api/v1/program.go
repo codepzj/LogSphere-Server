@@ -38,3 +38,15 @@ func (pa *ProgramApi) ProgramFindAll(c *gin.Context) {
 	}
 	response.FailWithMessage("查询失败", c)
 }
+
+func (pa *ProgramApi) URLFindByWebsiteId(c *gin.Context) {
+	websiteId := c.DefaultQuery("websiteId", "")
+	if websiteId == "" {
+		response.FailWithDetailed(nil, "参数缺失", c)
+		return
+	}
+	url := programService.FindURLByWebsiteID(websiteId)
+	response.OkWithData(map[string]string{
+		"url": url,
+	}, c)
+}

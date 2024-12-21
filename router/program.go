@@ -14,6 +14,7 @@ func (pr *ProgramRouter) InitProgramRouter(r *gin.Engine) {
 	pg := r.Group("program").Use(middleware.JWTAuth())
 	{
 		pg.GET("/find/:id", ProgramApi.ProgramFindAll)
+		pg.GET("/find/domain-by-websiteId", ProgramApi.URLFindByWebsiteId)
 		pg.POST("/create", ProgramApi.ProgramCreate)
 	}
 }
