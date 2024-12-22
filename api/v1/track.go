@@ -5,16 +5,21 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/lionsoul2014/ip2region/binding/golang/xdb"
 	"net/http"
 	"server/models/common/response"
 	"server/models/track"
 	"server/service"
+	"strings"
 )
 
 type TrackAPI struct {
 }
 
-var trackService = new(service.TrackService)
+var (
+	trackService = new(service.TrackService)
+	regionDBPath = "ip2region.xdb"
+)
 
 // WebSocket upgrader configuration
 var upgrader = websocket.Upgrader{
@@ -64,6 +69,22 @@ func (ta *TrackAPI) TrackUser(c *gin.Context) {
 			fmt.Println("Error unmarshalling message:", err)
 			conn.WriteMessage(websocket.TextMessage, []byte("Invalid data format"))
 			return
+		}
+		clientIP := c.ClientIP()
+		t.IPAddr = clientIP
+		searcher, err := xdb.NewWithFileOnly(regionDBPath)
+		if err != nil {
+			fmt.Printf("failed to create searcher: %s\n", err.Error())
+		}
+		region, err := searcher.SearchByStr(clientIP)
+		if err == nil {
+			regionSlice := strings.Split(region, "|")
+			fmt.Println(regionSlice)
+			area := regionSlice[0]
+			if area == "0" {
+				area = "未知"
+			}
+			t.Location = area
 		}
 
 		if err := trackService.TrackUserAction(t); err != nil {
