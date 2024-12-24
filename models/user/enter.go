@@ -13,5 +13,5 @@ type UserDetailModel struct {
 	Role        int       `json:"role"`
 	Avatar      string    `json:"avatar"`
 	UserModelID uint      `json:"account_id,omitempty"`
-	UserModel   UserModel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"user_model"`
+	UserModel   UserModel `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"user_model"`
 }

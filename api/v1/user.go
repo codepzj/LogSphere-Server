@@ -6,6 +6,7 @@ import (
 	"server/models/user"
 	"server/service"
 	"server/utils"
+	"strconv"
 
 	// "time"
 
@@ -50,6 +51,20 @@ func (ua *UserApi) UserLogin(c *gin.Context) {
 		return
 	}
 	response.FailWithMessage("系统内部错误", c)
+}
+
+func (ua *UserApi) GetUserDetailInfo(c *gin.Context) {
+	account_id := c.DefaultQuery("account_id", "")
+	if account_id == "" {
+		response.FailWithMessage("account_id为空", c)
+		return
+	}
+	id, _ := strconv.Atoi(account_id)
+	if cu, isFind := userService.FindUserDetailByID(uint(id)); isFind {
+		response.OkWithData(cu, c)
+		return
+	}
+	response.FailWithMessage("没有找到记录", c)
 }
 
 // UserClearStatus 清空user的Cookie

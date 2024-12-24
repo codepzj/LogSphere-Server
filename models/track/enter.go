@@ -16,8 +16,8 @@ type TrackModel struct {
 	UserAgent      string                `json:"userAgent"` // 用户代理信息
 	Timestamp      int64                 `json:"timestamp"` // 时间戳
 	StayDuration   int64                 `json:"stayDuration"`
-	ProgramModelID string                `json:"website_id"`
-	ProgramModel   *program.ProgramModel `json:"-" gorm:"references:WebSiteId"`
+	ProgramModelID string                `json:"website_id" gorm:"column:website_id"`
+	ProgramModel   *program.ProgramModel `json:"-" gorm:"foreignKey:ProgramModelID;references:WebSiteId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	IPAddr         string                `json:"ip_addr"`
 	Location       string                `json:"location"`
 }

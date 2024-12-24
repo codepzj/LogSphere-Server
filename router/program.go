@@ -16,5 +16,6 @@ func (pr *ProgramRouter) InitProgramRouter(r *gin.Engine) {
 		pg.GET("/find/:id", ProgramApi.ProgramFindAll)
 		pg.GET("/find/domain-by-websiteId", ProgramApi.URLFindByWebsiteId)
 		pg.POST("/create", ProgramApi.ProgramCreate)
+		pg.POST("/delete/:websiteId", ProgramApi.DeleteProgram)
 	}
 }

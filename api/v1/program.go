@@ -50,3 +50,15 @@ func (pa *ProgramApi) URLFindByWebsiteId(c *gin.Context) {
 		"url": url,
 	}, c)
 }
+func (pa *ProgramApi) DeleteProgram(c *gin.Context) {
+	websiteId := c.Param("websiteId")
+	if websiteId == "" {
+		response.FailWithMessage("website_id为空，删除失败", c)
+		return
+	}
+	if err := programService.DeleteProgram(websiteId); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.Ok(c)
+}
