@@ -18,12 +18,13 @@ func (pa *ProgramApi) ProgramCreate(c *gin.Context) {
 		response.Fail(c)
 		return
 	}
-	userId := uuid.NewString()
-	newProgram.WebSiteId = userId
+	newProgram.WebSiteId = uuid.NewString()
 	if programService.ProgramCreate(newProgram) != nil {
 		response.FailWithMessage("创建项目失败", c)
 	}
-	response.Ok(c)
+	response.OkWithData(map[string]string{
+		"website_id": newProgram.WebSiteId,
+	}, c)
 }
 
 func (pa *ProgramApi) ProgramFindAll(c *gin.Context) {
