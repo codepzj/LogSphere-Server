@@ -35,10 +35,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t logsphere-server:${{ github.sha }} .
-          docker tag logsphere-server:${{ github.sha }} codepzj/logsphere-server:latest
+          docker build -t codepzj/logsphere-server:${{ github.sha }} .  # 基于 commit SHA 打标签
+          docker tag codepzj/logsphere-server:${{ github.sha }} codepzj/logsphere-server:latest
 
-      - name: Push Docker image to Docker Hub
+      - name: Push Docker images to Docker Hub
         run: |
-          docker push codepzj/logsphere-server:${{ github.sha }}
-          docker push codepzj/logsphere-server:latest
+          docker push codepzj/logsphere-server:${{ github.sha }}  # 推送 SHA 标签
+          docker push codepzj/logsphere-server:latest  # 推送 latest 标签
+
