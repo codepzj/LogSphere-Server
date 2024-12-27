@@ -21,9 +21,9 @@ RUN chmod +x main
 
 FROM alpine:latest
 
-COPY --from=builder /app /usr/local/bin
+WORKDIR /app
 
-WORKDIR /usr/local/bin
+COPY --from=builder /app .
 
 EXPOSE 8081
 
