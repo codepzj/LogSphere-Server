@@ -14,7 +14,10 @@ WORKDIR /app
 ## 将后端的gin代码复制到docker容器中
 COPY . .
 
-#go构建可执行文件
+RUN go mod download
+RUN go mod tidy
+
+## go构建可执行文件
 RUN go build main.go
 
 RUN chmod +x main
