@@ -15,6 +15,7 @@ func (ur *UserRouter) InitUserRouter(r *gin.Engine) {
 	user := r.Group("user")
 	{
 		user.GET("/get", userApi.GetUserDetailInfo)
+		user.GET("/all", userApi.GetAllUsers)
 		user.GET("/clear", userApi.UserClearStatus)
 		user.POST("/create", userApi.UserRegister)
 		user.POST("/find", userApi.UserLogin)

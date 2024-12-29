@@ -62,3 +62,9 @@ func (us *UserService) EditUserDetails(u user.UserDetailModel) (int, error) {
 	result := global.LS_DB.Model(&user.UserDetailModel{}).Where("user_model_id = ?", u.UserModelID).Select("*").Updates(u)
 	return int(result.RowsAffected), result.Error
 }
+
+func (us *UserService) GetAllUsers() []user.UserDetailModel {
+	var users []user.UserDetailModel
+	global.LS_DB.Preload("UserModel").Find(&users)
+	return users
+}

@@ -18,10 +18,12 @@ type TrackService struct {
 
 // TrackUserAction 只有在页面进入和离开的时候将追踪日志写入数据库
 func (ts *TrackService) TrackUserAction(tm track.TrackModel) error {
-	fmt.Println(tm.ProgramModelID)
 	err := global.LS_DB.Where("website_id = ?", tm.ProgramModelID).First(&program.ProgramModel{}).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return errors.New("项目未找到")
+	}
+	if tm.StayDuration > 10*60*1000 {
+		return errors.New("在线时间异常")
 	}
 	switch tm.Type {
 	case "pageview", "pageduration", "pagebounce":

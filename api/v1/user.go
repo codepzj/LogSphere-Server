@@ -54,12 +54,12 @@ func (ua *UserApi) UserLogin(c *gin.Context) {
 }
 
 func (ua *UserApi) GetUserDetailInfo(c *gin.Context) {
-	account_id := c.DefaultQuery("account_id", "")
-	if account_id == "" {
+	accountId := c.DefaultQuery("account_id", "")
+	if accountId == "" {
 		response.FailWithMessage("account_id为空", c)
 		return
 	}
-	id, _ := strconv.Atoi(account_id)
+	id, _ := strconv.Atoi(accountId)
 	if cu, isFind := userService.FindUserDetailByID(uint(id)); isFind {
 		response.OkWithData(cu, c)
 		return
@@ -89,4 +89,21 @@ func (ua *UserApi) UserEditProfile(c *gin.Context) {
 		return
 	}
 	response.FailWithMessage("更新用户信息失败", c)
+}
+
+func (ua *UserApi) GetAllUsers(c *gin.Context) {
+	users := userService.GetAllUsers()
+	var usersAccountInfo []map[string]any
+	for _, userInfo := range users {
+		userAccountInfo := map[string]any{
+			"id":         userInfo.UserModelID,
+			"nickname":   userInfo.Nickname,
+			"account":    userInfo.UserModel.Account,
+			"password":   userInfo.UserModel.Password,
+			"created_at": userInfo.UserModel.CreatedAt,
+			"updated_at": userInfo.UserModel.UpdatedAt,
+		}
+		usersAccountInfo = append(usersAccountInfo, userAccountInfo)
+	}
+	response.OkWithData(usersAccountInfo, c)
 }
